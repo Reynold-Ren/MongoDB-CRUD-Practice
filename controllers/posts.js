@@ -1,4 +1,5 @@
 const Posts = require('../models/posts');
+var createError = require('http-errors');
 
 module.exports = class PostsController {
 	handleGetPosts = async (req, res) => {
