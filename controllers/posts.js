@@ -1,96 +1,84 @@
-const Post = require('../models/posts');
-const responseHandle = require('../responseHandle');
-const errHandle = require('../errorHandle');
-const httpStatusCodes = require('../httpStatusCodes');
+const Posts = require('../models/posts');
 
 module.exports = class PostsController {
-	handleGetPosts(req, res) {
-		Post.find()
-			.then((data) => {
-				responseHandle(res, httpStatusCodes.OK, data)
-			})
-			.catch(err => {
-				errHandle(res, httpStatusCodes.INTERNAL_SERVER, err.message)
-			})
+	handleGetPosts = async (req, res) => {
+		const allPosts = await Posts.find();
+		res.json({
+			status: 'Success',
+			data: allPosts
+		});
 	}
 
-	handleAddPost(req, res) {
-		let body = "";
+	handleAddPost = async (req, res) => {
+		try {
+			let { name, content, image, tags, type, likes, comments } = req.body;
+			image = image ? image : '';
+			likes = likes ? likes : 0;
+			comments = comments ? comments : 0;
 
-		req.on('data', chunk => {
-			body += chunk;
-		})
-
-		req.on('end', () => {
-			try {
-				let { name, content, image, tags, type, likes, comments } = JSON.parse(body);
-
-				image = image ? image : '';
-				likes = likes ? likes : 0;
-				comments = comments ? comments : 0;
-
-				Post.create({ name, content, image, tags, type, likes, comments })
-						.then( data => {
-							const result = {
-								id: data._id
-							}
-							responseHandle(res, httpStatusCodes.OK, result)
-						})
-						.catch( err => {
-							errHandle(res, httpStatusCodes.INTERNAL_SERVER, err.errors);
-						})
-			} catch(error) {
-				errHandle(res, httpStatusCodes.INTERNAL_SERVER, error.message);
-			}}
-		)
-	}
-
-	handleDeletePost(req, res) {
-		if ( req.url.startsWith("/posts/") ) {
-			const id = req.url.split('/').pop();
-			
-			Post.findByIdAndDelete(id)
-					.then( () => {
-						responseHandle(res, httpStatusCodes.OK, `刪除成功`);
-					})
-					.catch( err => {
-						errHandle(res, httpStatusCodes.BAD_REQUEST, '查無此 ID');
-					})
-		} else {
-			Post.deleteMany({})
-					.then( data => {
-						responseHandle(res, httpStatusCodes.OK, `刪除成功，共刪除 ${ data.deletedCount } 筆`);
-					})
-					.catch( err => {
-						console.log(err.errors);
-					})
+			const newPost = await Posts.create({ name, content, image, tags, type, likes, comments });
+			res.json({
+				status: 'Success',
+				data: newPost
+			});
+		} catch(error) {
+			res.json({
+				status: 'Failed',
+				data: createError(400, error.message)
+			});
 		}
 	}
 
-	handleUpdatePost(req, res) {
-		let body = "";
-
-		req.on('data', chunk => {
-			body += chunk;
-		})
-	
-		req.on('end', () => {
-			try {
-				const data = JSON.parse(body);
-				const id = req.url.split('/').pop();
-
-				Post.findByIdAndUpdate(id, data, { runValidators: true })
-					.then( data => {
-						responseHandle(res, httpStatusCodes.OK, data);
-					})
-					.catch( err => {
-						console.log(err);
-						errHandle(res, httpStatusCodes.BAD_REQUEST, err.errors);
-					})
-
-			} catch(error) {
-				errHandle(res, httpStatusCodes.INTERNAL_SERVER, error.message);
+	handleDeleteAllPosts = async (req, res) => {
+		const deleteAllPostsResult = await Posts.deleteMany({});
+		res.json({
+			status: 'Success',
+			data: {
+				'deletedCount': deleteAllPostsResult.deletedCount
 			}
-		})
+		});
+	}
+
+	handleDeletePost = async (req, res) => {
+		const { id } = req.params;
+		
+		try {
+			const deleteSinglePostResult = await Posts.findByIdAndDelete(id);
+			res.json({
+				status: 'Success',
+				data: {
+					...deleteSinglePostResult
+				}
+			});
+		}
+		catch {
+			res.json({
+				status: 'Failed',
+				data: {
+					message: '查無此 ID'
+				}
+			});
+		}
+	}
+
+	handleUpdatePost = async (req, res) => {
+		const { id } = req.params;
+		const data = req.body;
+
+		if ( data.content )
+
+		try {
+			const updatePost = await Posts.findByIdAndUpdate(id, data, { runValidators: true, new: true });
+			res.json({
+				status: 'Success',
+				data: updatePost
+			});
+		}
+		catch(error) {
+			res.json({
+				status: 'Failed',
+				data: createError(500, error.message)
+			});
+		}
 	}
 }
