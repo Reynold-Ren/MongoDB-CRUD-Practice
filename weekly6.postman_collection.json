@@ -1,0 +1,381 @@
+{
+	"info": {
+		"_postman_id": "bbfa9314-2bcd-4e0c-b268-31e80b92fcd9",
+		"name": "weekly6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4620858"
+	},
+	"item": [
+		{
+			"name": "post",
+			"item": [
+				{
+					"name": "取得貼文(排序&搜尋)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/posts?timeSort=asc&q=",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "timeSort",
+									"value": "asc"
+								},
+								{
+									"key": "q",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除所有貼文",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/posts",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增單筆貼文",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"新增測試資料\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/posts",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除單筆貼文",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/posts/62a6345e1f7d90e32ab7e161",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"posts",
+								"62a6345e1f7d90e32ab7e161"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "編輯單筆貼文",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"測試\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/posts/62a634761f7d90e32ab7e166",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"posts",
+								"62a634761f7d90e32ab7e166"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "用戶註冊",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Reynold\",\n    \"email\":\"abc@abc.com\",\n    \"password\":\"1234Qwer$\",\n    \"confirmPassword\":\"1234Qwer$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/users/sign_up",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用戶登入",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"abc@abc.com\",\n    \"password\":\"1234Qwer$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/users/sign_in",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改密碼",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"confirmPassword\":\"1234Qwer$\",\n    \"password\":\"1234Qwer$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/users/updatePassword",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"updatePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得個人資訊",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/users/profile",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新個人資訊",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYzMWFjMjg2MWU4OWNkYTZjMzI3OCIsImlhdCI6MTY1NTA1ODg4NCwiZXhwIjoxNjU1NjYzNjg0fQ.w0ASeUVULyKncAA2ssCAnelIzQ1bFTj1EPZhFqLfBko",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Reynold111\",\n    \"avatar\":\"https://google.com\",\n    \"sex\": \"male\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://guarded-citadel-39447.herokuapp.com/users/profile",
+							"protocol": "https",
+							"host": [
+								"guarded-citadel-39447",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
