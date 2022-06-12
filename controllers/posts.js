@@ -1,85 +1,65 @@
 const Posts = require('../models/posts');
-var createError = require('http-errors');
+const handleError = require('../handle/handleError');
+const handleSuccess = require('../handle/handleSuccess');
 
 module.exports = class PostsController {
 	handleGetPosts = async (req, res) => {
-		const allPosts = await Posts.find();
-		res.json({
-			status: 'Success',
-			data: allPosts
-		});
-	}
+		const timeSort = req.query.timeSort === 'asc' ? 'createdAt' : '-createdAt';
+		const q = req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
+		const allPosts = await Posts.find(q)
+			.populate({
+				path: 'userId',
+				select: 'name avatar',
+			})
+			.sort(timeSort);
+		handleSuccess(res, allPosts);
+	};
 
 	handleAddPost = async (req, res) => {
 		try {
-			let { name, content, image, tags, type, likes, comments } = req.body;
-			image = image ? image : '';
-			likes = likes ? likes : 0;
-			comments = comments ? comments : 0;
-
-			const newPost = await Posts.create({ name, content, image, tags, type, likes, comments });
-			res.json({
-				status: 'Success',
-				data: newPost
-			});
-		} catch(error) {
-			res.json({
-				status: 'Failed',
-				data: createError(400, error.message)
-			});
+			let { userId, content, image = '' } = req.body;
+			if (content === '') {
+				handleError(res);
+			}
+			const newPost = await Posts.create({ userId, content, image });
+			handleSuccess(res, newPost);
+		} catch (error) {
+			handleError(res);
 		}
-	}
+	};
 
 	handleDeleteAllPosts = async (req, res) => {
-		const deleteAllPostsResult = await Posts.deleteMany({});
-		res.json({
-			status: 'Success',
-			data: {
-				'deletedCount': deleteAllPostsResult.deletedCount
-			}
-		});
-	}
+		try {
+			const deleteAllPostsResult = await Posts.deleteMany({});
+			handleSuccess(res, deleteAllPostsResult.deletedCount);
+		} catch (error) {
+			handleError(res, error);
+		}
+	};
 
 	handleDeletePost = async (req, res) => {
 		const { id } = req.params;
-		
+
 		try {
 			const deleteSinglePostResult = await Posts.findByIdAndDelete(id);
-			res.json({
-				status: 'Success',
-				data: {
-					...deleteSinglePostResult
-				}
-			});
+			handleSuccess(res, deleteSinglePostResult);
+		} catch {
+			handleError(res, error);
 		}
-		catch {
-			res.json({
-				status: 'Failed',
-				data: {
-					message: '查無此 ID'
-				}
-			});
-		}
-	}
+	};
 
 	handleUpdatePost = async (req, res) => {
 		const { id } = req.params;
-		const data = req.body;
+		const { content } = req.body;
 
-		if ( data.content )
-
+		if (content === '') {
+			handleError(res, '尚未填寫內容');
+		}
 		try {
-			const updatePost = await Posts.findByIdAndUpdate(id, data, { runValidators: true, new: true });
-			res.json({
-				status: 'Success',
-				data: updatePost
-			});
+			const updatePost = await Posts.findByIdAndUpdate(id, { content }, { new: true });
+			handleSuccess(res, updatePost);
+		} catch (error) {
+			handleError(res, error);
 		}
-		catch(error) {
-			res.json({
-				status: 'Failed',
-				data: createError(500, error.message)
-			});
-		}
-	}
-}
+	};
+};
