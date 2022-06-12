@@ -4,6 +4,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
+const uploadRouter = require('./routes/upload');
 const connectDB = require('./connections/connection')();
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
+app.use('/upload', uploadRouter);
 
 const resErrorProd = (err, res) => {
 	if (err.isOperational) {
