@@ -16,14 +16,14 @@ module.exports = class PostsController {
 	};
 
 	handleAddPost = async (req, res, next) => {
-		let { userId, content, image = '' } = req.body;
+		let { content, image = '' } = req.body;
 		if (!content) {
 			return next(appError(400, 'content 不得為空', next));
 		}
-		if (!userId) {
+		if (!req.user.id) {
 			return next(appError(400, '未帶入使用者', next));
 		}
-		const newPost = await Posts.create({ userId, content, image });
+		const newPost = await Posts.create({ userId: req.user.id, content, image });
 		handleSuccess(res, newPost);
 	};
 
@@ -36,7 +36,7 @@ module.exports = class PostsController {
 		const { id } = req.params;
 
 		const deleteSinglePostResult = await Posts.findByIdAndDelete(id);
-		if (!deleteSinglePostResult?.deletedCount) {
+		if (!deleteSinglePostResult) {
 			return next(appError(400, '該文章不存在', next));
 		}
 		handleSuccess(res, deleteSinglePostResult);
@@ -48,7 +48,7 @@ module.exports = class PostsController {
 		if (!content) {
 			return next(appError(400, '尚未填寫內容', next));
 		}
-		const updatePost = await Posts.findByIdAndUpdate(id, { content }, { new: true });
+		const updatePost = await Posts.findByIdAndUpdate(id, { content }, { runValidators: true, new: true });
 		if (!updatePost) {
 			return next(appError(400, '該文章不存在', next));
 		}
