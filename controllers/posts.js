@@ -1,9 +1,9 @@
 const Posts = require('../models/posts');
-const handleError = require('../handle/handleError');
 const handleSuccess = require('../handle/handleSuccess');
+const appError = require('../handle/appError');
 
 module.exports = class PostsController {
-	handleGetPosts = async (req, res) => {
+	handleGetPosts = async (req, res, next) => {
 		const timeSort = req.query.timeSort === 'asc' ? 'createdAt' : '-createdAt';
 		const q = req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
 		const allPosts = await Posts.find(q)
@@ -15,51 +15,43 @@ module.exports = class PostsController {
 		handleSuccess(res, allPosts);
 	};
 
-	handleAddPost = async (req, res) => {
-		try {
-			let { userId, content, image = '' } = req.body;
-			if (content === '') {
-				handleError(res);
-			}
-			const newPost = await Posts.create({ userId, content, image });
-			handleSuccess(res, newPost);
-		} catch (error) {
-			handleError(res);
+	handleAddPost = async (req, res, next) => {
+		let { userId, content, image = '' } = req.body;
+		if (!content) {
+			return next(appError(400, 'content 不得為空', next));
 		}
+		if (!userId) {
+			return next(appError(400, '未帶入使用者', next));
+		}
+		const newPost = await Posts.create({ userId, content, image });
+		handleSuccess(res, newPost);
 	};
 
-	handleDeleteAllPosts = async (req, res) => {
-		try {
-			const deleteAllPostsResult = await Posts.deleteMany({});
-			handleSuccess(res, deleteAllPostsResult.deletedCount);
-		} catch (error) {
-			handleError(res, error);
-		}
+	handleDeleteAllPosts = async (req, res, next) => {
+		const deleteAllPostsResult = await Posts.deleteMany({});
+		handleSuccess(res, deleteAllPostsResult.deletedCount);
 	};
 
-	handleDeletePost = async (req, res) => {
+	handleDeletePost = async (req, res, next) => {
 		const { id } = req.params;
 
-		try {
-			const deleteSinglePostResult = await Posts.findByIdAndDelete(id);
-			handleSuccess(res, deleteSinglePostResult);
-		} catch {
-			handleError(res, error);
+		const deleteSinglePostResult = await Posts.findByIdAndDelete(id);
+		if (!deleteSinglePostResult?.deletedCount) {
+			return next(appError(400, '該文章不存在', next));
 		}
+		handleSuccess(res, deleteSinglePostResult);
 	};
 
-	handleUpdatePost = async (req, res) => {
+	handleUpdatePost = async (req, res, next) => {
 		const { id } = req.params;
 		const { content } = req.body;
-
-		if (content === '') {
-			handleError(res, '尚未填寫內容');
+		if (!content) {
+			return next(appError(400, '尚未填寫內容', next));
 		}
-		try {
-			const updatePost = await Posts.findByIdAndUpdate(id, { content }, { new: true });
-			handleSuccess(res, updatePost);
-		} catch (error) {
-			handleError(res, error);
+		const updatePost = await Posts.findByIdAndUpdate(id, { content }, { new: true });
+		if (!updatePost) {
+			return next(appError(400, '該文章不存在', next));
 		}
+		handleSuccess(res, updatePost);
 	};
 };
